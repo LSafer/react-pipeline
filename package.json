@@ -1,0 +1,26 @@
+{
+  "name": "react-pipeline-component",
+  "version": "1.0.0-beta.1",
+  "description": "A solution for react provider hell (provider version of callback hell)",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "repository": "https://github.com/lsafer/react-pipeline",
+  "author": "LSafer",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "clean": "npx rimraf build",
+    "build": "yarn clean && tsc",
+    "lint": "tsc --noEmit",
+    "test": "mocha --require ts-node/register src/test/**/*.spec.ts",
+    "start": "build/index.js"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@types/react": "18.0.9",
+    "@types/node": "^17.0.23",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  }
+}
