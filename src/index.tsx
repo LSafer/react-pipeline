@@ -24,10 +24,22 @@ export function Pipe(props: {}) {
 export function Pipeline(props: {
     components: ReactNode[]
 }) {
+    const pipe = usePipe()
     const [component, ...components] = props.components
 
     return <PipeProvider
-        component={<Pipeline components={components} />}
+        component={<Piping components={[...components, pipe]} />}
+        children={component}
+    />
+}
+
+export function Piping(props: {
+    components: ReactNode[]
+}) {
+    const [component, ...components] = props.components
+
+    return <PipeProvider
+        component={<Piping components={components} />}
         children={component}
     />
 }
