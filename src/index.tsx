@@ -40,6 +40,15 @@ export function Pipe() {
 }
 
 /**
+ * A shortcut to pass {@code <Pipe />} as the children prop.
+ *
+ * @since 1.0.0
+ */
+export const pipe = {
+    children: <Pipe />
+};
+
+/**
  * Render the provided components with the last
  * component's pipe being the current pipe.
  *
