@@ -11,6 +11,7 @@
     "jsx": "react-jsx",
     "noImplicitAny": false,
     "noImplicitThis": false,
-    "declaration": true
+    "declaration": true,
+    "sourceMap": true
   }
 }
