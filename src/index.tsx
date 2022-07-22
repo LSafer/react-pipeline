@@ -61,17 +61,18 @@ export const pipe = {
  */
 export function Pipeline(props: {
     components?: ReactNode[]
-    children?: ReactElement[]
+    children?: ReactElement | ReactElement[]
 }) {
+    const {components = [], children = []} = props;
     const pipe = usePipe();
-    const [component, ...components] = [
-        ...props.components ?? [],
-        ...props.children ?? []
+    const [currentComponent, ...nextComponents] = [
+        ...components,
+        ...Array.isArray(children) ? children : [children]
     ];
 
     return <PipeProvider
-        component={<Piping components={[...components, pipe]} />}
-        children={component}
+        component={<Piping components={[...nextComponents, pipe]} />}
+        children={currentComponent}
     />;
 }
 
@@ -86,15 +87,16 @@ export function Pipeline(props: {
  */
 export function Piping(props: {
     components?: ReactNode[]
-    children?: ReactElement[]
+    children?: ReactElement | ReactElement[]
 }) {
-    const [component, ...components] = [
-        ...props.components ?? [],
-        ...props.children ?? []
+    const {components = [], children = []} = props;
+    const [currentComponent, ...nextComponents] = [
+        ...components,
+        ...Array.isArray(children) ? children : [children]
     ];
 
     return <PipeProvider
-        component={<Piping components={components} />}
-        children={component}
+        component={<Piping components={nextComponents} />}
+        children={currentComponent}
     />;
 }
