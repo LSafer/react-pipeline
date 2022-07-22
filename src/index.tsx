@@ -1,4 +1,4 @@
-import React, {createContext, ReactNode, useContext} from "react";
+import React, {createContext, ReactElement, ReactNode, useContext} from "react";
 
 /**
  * The context holding the component to be rendered on {@link Pipe}.
@@ -60,10 +60,14 @@ export const pipe = {
  * @since 1.0.0
  */
 export function Pipeline(props: {
-    components: ReactNode[]
+    components?: ReactNode[]
+    children?: ReactElement[]
 }) {
     const pipe = usePipe();
-    const [component, ...components] = props.components;
+    const [component, ...components] = [
+        ...props.components ?? [],
+        ...props.children ?? []
+    ];
 
     return <PipeProvider
         component={<Piping components={[...components, pipe]} />}
@@ -81,9 +85,13 @@ export function Pipeline(props: {
  * @since 1.0.0
  */
 export function Piping(props: {
-    components: ReactNode[]
+    components?: ReactNode[]
+    children?: ReactElement[]
 }) {
-    const [component, ...components] = props.components;
+    const [component, ...components] = [
+        ...props.components ?? [],
+        ...props.children ?? []
+    ];
 
     return <PipeProvider
         component={<Piping components={components} />}
