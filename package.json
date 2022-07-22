@@ -7,6 +7,14 @@
   "repository": "https://github.com/lsafer/react-pipeline",
   "author": "LSafer",
   "license": "Apache-2.0",
+  "keywords": [
+    "react",
+    "context hell",
+    "provider hell",
+    "pipeline",
+    "tree",
+    "component"
+  ],
   "scripts": {
     "dev": "nodemon src/index.ts",
     "clean": "npx rimraf build",
