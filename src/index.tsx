@@ -3,17 +3,19 @@ import React, {createContext, ReactElement, ReactNode, useContext} from "react";
 /**
  * The context holding the component to be rendered on {@link Pipe}.
  */
-const PipeContext = createContext<ReactNode>(<></>);
+const PipeContext = createContext<ReactNode>(null);
+
+export type PipeProviderProps = {
+    component: ReactNode
+    children: ReactNode
+}
 
 /**
  * A provider providing the component to be rendered on {@link Pipe}.
  *
  * @since 1.0.0
  */
-export function PipeProvider(props: {
-    component: ReactNode,
-    children: ReactNode
-}) {
+export function PipeProvider(props: PipeProviderProps) {
     return <PipeContext.Provider value={props.component}>
         {props.children}
     </PipeContext.Provider>;
@@ -48,6 +50,11 @@ export const pipe = {
     children: <Pipe />
 };
 
+export type PipelineProps = {
+    components?: ReactNode[]
+    children?: ReactElement | ReactElement[]
+}
+
 /**
  * Render the provided components with the last
  * component's pipe being the current pipe.
@@ -59,21 +66,14 @@ export const pipe = {
  *
  * @since 1.0.0
  */
-export function Pipeline(props: {
-    components?: ReactNode[]
-    children?: ReactElement | ReactElement[]
-}) {
+export function Pipeline(props: PipelineProps) {
     const {components = [], children = []} = props;
     const pipe = usePipe();
-    const [currentComponent, ...nextComponents] = [
+
+    return createPipeline([
         ...components,
         ...Array.isArray(children) ? children : [children]
-    ];
-
-    return <PipeProvider
-        component={<Piping components={[...nextComponents, pipe]} />}
-        children={currentComponent}
-    />;
+    ], pipe);
 }
 
 /**
@@ -88,15 +88,30 @@ export function Pipeline(props: {
 export function Piping(props: {
     components?: ReactNode[]
     children?: ReactElement | ReactElement[]
+    fallback?: ReactNode
 }) {
     const {components = [], children = []} = props;
-    const [currentComponent, ...nextComponents] = [
+
+    return createPipeline([
         ...components,
         ...Array.isArray(children) ? children : [children]
-    ];
+    ], props.fallback);
+}
 
-    return <PipeProvider
-        component={<Piping components={nextComponents} />}
+/**
+ * Create a pipeline component from the provided components.
+ *
+ * Note: this component won't pass the current pipe.
+ * If this was in another piping, The `<Pipe />` component
+ * in this piping won't render the next component in the parent piping.
+ *
+ * @since 1.1.0
+ */
+export function createPipeline(components: ReactNode[], fallback?: ReactNode) {
+    const [currentComponent, ...nextComponents] = components;
+
+    return <PipeContext.Provider
+        value={nextComponents.length > 0 ? createPipeline(nextComponents, fallback) : fallback ?? null}
         children={currentComponent}
     />;
 }
